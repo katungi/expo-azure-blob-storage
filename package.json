@@ -1,23 +1,55 @@
 {
   "name": "expo-azure-blob-storage",
-  "version": "1.0.0",
-  "main": "index.ts",
+  "version": "0.0.1",
+  "description": "Easy Azure Blob Storage uploads for Expo and React Native applications",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "scripts": {
-    "start": "expo start",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
-    "web": "expo start --web"
+    "build": "tsc", 
+    "clean": "rm -rf lib",
+    "dev": "tsc --watch", 
+    "prepare": "npm run clean && npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/katungi/expo-azure-blob-storage.git"
+  },
+  "keywords": [
+    "expo",
+    "react-native",
+    "azure",
+    "blob-storage",
+    "file-upload",
+    "image-upload",
+    "azure-storage",
+    "react-native-azure",
+    "expo-azure"
+  ],
+  "author": "Katungi Dennis <dankatdennis@gmail.com>",
+  "license": "MIT",
+  "homepage": "https://github.com/katungi/expo-azure-blob-storage",
+  "bugs": {
+    "url": "https://github.com/katungi/expo-azure-blob-storage/issues"
   },
   "dependencies": {
     "expo": "~53.0.16",
     "expo-status-bar": "~2.2.3",
     "react": "19.0.0",
-    "react-native": "0.79.5"
+    "react-native": "0.79.5", 
+    "expo-file-system": ">=15.0.0",
+    "expo-image-picker": ">=14.0.0",
+    "expo-constants": ">=17.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
     "@types/react": "~19.0.10",
-    "typescript": "~5.8.3"
+    "typescript": "~5.8.3", 
+    "@types/node": "^18.0.0"
   },
+  "files": [
+    "lib",
+    "README.md",
+    "package.json"
+  ],
   "private": true
 }
