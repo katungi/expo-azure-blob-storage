@@ -22,9 +22,9 @@ interface TestConfig {
 
 export default function App() {
   const [config, setConfig] = useState<TestConfig>({
-    storageAccount: 'fameliaappstorage', 
-    containerName: 'cooking-images',
-    sasToken: 'sp=racw&st=2025-06-11T12:48:26Z&se=2026-06-06T20:48:26Z&sv=2024-11-04&sr=c&sig=NiNgVCc8yb%2F4Lr2Abalgj9AE77lWr2%2FD5OcBgN4T8MM%3D'
+    storageAccount: '', 
+    containerName: '',
+    sasToken: ''
   });
   
   const [isUploading, setIsUploading] = useState(false);
