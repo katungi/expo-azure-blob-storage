@@ -1,6 +1,6 @@
 # 🚀 Expo Azure Blob Storage
 
-<img src="" alt="logo" />
+<img src="https://github.com/katungi/expo-azure-blob-storage/blob/main/assets/logo.png" alt="logo" />
 
 <p align="center">
   <img src="https://img.shields.io/npm/v/expo-azure-blob-storage" alt="npm version" />

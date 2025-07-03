@@ -1,0 +1,65 @@
+name: 🔍 CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    name: 🧪 Test and Build
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        node-version: [18, 20]
+        
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+        
+      - name: 📋 Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+          
+      - name: 📦 Install dependencies
+        run: npm ci
+        
+      - name: 🔐 Audit dependencies
+        run: npm audit --audit-level=high
+        
+      - name: 🏗️ Build library
+        run: npm run build
+        
+      - name: ✅ Validate package
+        run: npm pack --dry-run
+        
+      - name: 📋 Check exports
+        run: |
+          echo "🔍 Checking build structure:"
+          echo "📂 CJS files:"
+          find lib/cjs -name "*.js" -o -name "*.d.ts" | head -10
+          echo "📂 ESM files:"
+          find lib/esm -name "*.js" -o -name "*.d.ts" | head -10
+          echo "🔍 Checking main entry points exist:"
+          test -f lib/cjs/index.js && echo "✅ CJS entry point exists"
+          test -f lib/esm/index.js && echo "✅ ESM entry point exists"
+          test -f lib/cjs/index.d.ts && echo "✅ TypeScript declarations exist"
+          
+      - name: 🔍 Verify TypeScript declarations
+        run: |
+          echo "🔍 Checking TypeScript declarations:"
+          ls -la lib/cjs/*.d.ts
+          ls -la lib/esm/*.d.ts
+          echo "📋 Sample CJS declaration:"
+          head -10 lib/cjs/index.d.ts
+          
+      - name: 📊 Build summary
+        run: |
+          echo "🎉 Build completed successfully!"
+          echo "📦 CJS build size: $(du -sh lib/cjs | cut -f1)"
+          echo "📦 ESM build size: $(du -sh lib/esm | cut -f1)"
+          echo "📦 Total build size: $(du -sh lib | cut -f1)" 
