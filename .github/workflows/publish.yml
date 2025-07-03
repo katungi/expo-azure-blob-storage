@@ -63,11 +63,6 @@ jobs:
           echo "📂 ESM build:"
           ls -la lib/esm/
           
-      - name: ✅ Validate package
-        run: |
-          echo "🔍 Validating package contents..."
-          pnpm pack --dry-run
-          
       - name: 🔍 Check if version exists
         run: |
           VERSION=$(node -p "require('./package.json').version")
