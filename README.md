@@ -1,5 +1,7 @@
 # 🚀 Expo Azure Blob Storage
 
+<img src="" alt="logo" />
+
 <p align="center">
   <img src="https://img.shields.io/npm/v/expo-azure-blob-storage" alt="npm version" />
   <img src="https://img.shields.io/npm/dt/expo-azure-blob-storage" alt="npm downloads" />
