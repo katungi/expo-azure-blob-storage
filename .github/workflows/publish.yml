@@ -46,7 +46,7 @@ jobs:
           echo "Types: $(node -p "require('./package.json').types")"
           
       - name: 📦 Install dependencies
-        run: pnpm install
+        run: pnpm install --no-frozen-lockfile
         
       - name: 🔐 Audit dependencies
         run: pnpm audit --audit-level=high
