@@ -12,12 +12,12 @@
     }
   },
   "scripts": {
-    "build": "npm run clean && npm run build:cjs && npm run build:esm",
+    "build": "pnpm run clean && pnpm run build:cjs && pnpm run build:esm",
     "build:cjs": "tsc",
     "build:esm": "tsc -p tsconfig.esm.json",
     "clean": "rm -rf lib",
     "dev": "tsc --watch",
-    "prepare": "npm run build"
+    "prepare": "pnpm run build"
   },
   "repository": {
     "type": "git",
