@@ -14,5 +14,6 @@ export default defineConfig({
     "expo-image-picker",
     "expo-constants",
     "react-native",
+    "react",
   ],
 });
