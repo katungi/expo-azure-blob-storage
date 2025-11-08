@@ -55,6 +55,7 @@
     "expo-status-bar": "~2.2.3",
     "react": "19.0.0",
     "react-native": "0.79.5",
+    "tsdown": "^0.16.1",
     "typescript": "~5.8.3"
   },
   "files": [
