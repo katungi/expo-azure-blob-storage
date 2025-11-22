@@ -1,13 +1,15 @@
 {
   "compilerOptions": {
     "strict": true,
-    "target": "ES2018",
-    "lib": ["ES2018", "DOM"],
-    "module": "commonjs",
+    "target": "es2022",
+    "lib": ["es2022", "dom", "dom.iterable"],
+    "module": "esnext",
     "declaration": true,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitOverride": true,
     "declarationMap": true,
     "sourceMap": true,
-    "outDir": "./lib/cjs",
+    "outDir": "dist",
     "rootDir": "./src",
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
@@ -22,9 +24,7 @@
     "noUnusedLocals": false,
     "noUnusedParameters": false
   },
-  "include": [
-    "src/**/*"
-  ],
+  "include": ["src/**/*"],
   "exclude": [
     "node_modules",
     "lib",

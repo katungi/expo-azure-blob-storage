@@ -2,22 +2,19 @@
   "name": "expo-azure-blob-storage",
   "version": "0.0.1",
   "description": "Easy Azure Blob Storage uploads for Expo and React Native applications",
-  "main": "./lib/cjs/index.js",
-  "module": "./lib/esm/index.js",
-  "types": "./lib/cjs/index.d.ts",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.cts",
   "exports": {
     ".": {
-      "require": "./lib/cjs/index.js",
-      "import": "./lib/esm/index.js"
-    }
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    },
+    "./package.json": "./package.json"
   },
   "scripts": {
-    "build": "pnpm run clean && pnpm run build:cjs && pnpm run build:esm",
-    "build:cjs": "tsc",
-    "build:esm": "tsc -p tsconfig.esm.json",
-    "clean": "rm -rf lib",
-    "dev": "tsc --watch",
-    "prepare": "pnpm run build"
+    "build": "tsdown",
+    "dev": "tsdown --watch ./src"
   },
   "repository": {
     "type": "git",
@@ -40,6 +37,7 @@
   "bugs": {
     "url": "https://github.com/katungi/expo-azure-blob-storage/issues"
   },
+  "sideEffects": false,
   "dependencies": {
     "expo-constants": ">=17.0.0",
     "expo-file-system": ">=15.0.0",
@@ -58,11 +56,11 @@
     "expo-status-bar": "~2.2.3",
     "react": "19.0.0",
     "react-native": "0.79.5",
+    "tsdown": "^0.16.1",
     "typescript": "~5.8.3"
   },
   "files": [
-    "lib",
-    "README.md",
-    "package.json"
+    "dist",
+    "README.md"
   ]
 }
