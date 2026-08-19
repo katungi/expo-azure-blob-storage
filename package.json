@@ -1,23 +1,33 @@
 {
 	"name": "expo-azure-blob-storage",
-	"version": "0.0.2",
+	"version": "0.0.3",
 	"description": "Easy Azure Blob Storage uploads for Expo and React Native applications",
 	"main": "./dist/index.cjs",
 	"module": "./dist/index.mjs",
 	"types": "./dist/index.d.cts",
 	"exports": {
 		".": {
-			"import": "./dist/index.mjs",
-			"require": "./dist/index.cjs"
+			"import": {
+				"types": "./dist/index.d.mts",
+				"default": "./dist/index.mjs"
+			},
+			"require": {
+				"types": "./dist/index.d.cts",
+				"default": "./dist/index.cjs"
+			}
 		},
 		"./package.json": "./package.json"
 	},
 	"scripts": {
-		"build:npm": "tsdown src/index.ts --format esm --format cjs --dts --no-treeshake --sourcemap --exports",
-		"build:jsr": "tsdown src/index.ts --no-treeshake --sourcemap --exports",
+		"build": "pnpm run build:npm",
+		"build:npm": "tsdown src/index.ts --format esm --format cjs --dts --no-treeshake --sourcemap",
+		"build:jsr": "tsdown src/index.ts --no-treeshake --sourcemap",
 		"dev": "tsdown --watch ./src",
-		"lint": "biome format",
-		"lint:fix": "biome format --write"
+		"typecheck": "tsc --noEmit",
+		"lint": "biome check",
+		"lint:fix": "biome check --write",
+		"format": "biome format",
+		"format:fix": "biome format --write"
 	},
 	"repository": {
 		"type": "git",
@@ -41,11 +51,6 @@
 		"url": "https://github.com/katungi/expo-azure-blob-storage/issues"
 	},
 	"sideEffects": false,
-	"dependencies": {
-		"expo-constants": ">=17.0.0",
-		"expo-file-system": ">=15.0.0",
-		"expo-image-picker": "^16.1.4"
-	},
 	"peerDependencies": {
 		"expo": ">=49.0.0",
 		"expo-constants": ">=17.0.0",
@@ -60,6 +65,9 @@
 		"@types/node": "^18.0.0",
 		"@types/react": "~19.0.10",
 		"expo": "~53.0.24",
+		"expo-constants": "~17.1.7",
+		"expo-file-system": "~18.1.11",
+		"expo-image-picker": "~16.1.4",
 		"expo-status-bar": "~2.2.3",
 		"react": "19.0.0",
 		"react-native": "0.79.6",
@@ -72,11 +80,45 @@
 	],
 	"pnpm": {
 		"overrides": {
-			"on-headers@<1.1.0": ">=1.1.0",
-			"js-yaml@<3.14.2": ">=3.14.2",
-			"js-yaml@>=4.0.0 <4.1.1": ">=4.1.1",
+			"@isaacs/brace-expansion@<=5.0.0": ">=5.0.1",
+			"@xmldom/xmldom@<0.8.13": ">=0.8.13",
+			"brace-expansion@<1.1.18": ">=1.1.18",
+			"brace-expansion@>=2.0.0 <2.1.4": ">=2.1.4",
 			"glob@>=10.2.0 <10.5.0": ">=10.5.0",
-			"node-forge@<1.3.2": ">=1.3.2"
+			"js-yaml@<3.14.2": ">=3.14.2",
+			"js-yaml@>=4.0.0 <4.3.1": ">=4.3.1",
+			"minimatch@<3.1.4": ">=3.1.4",
+			"minimatch@>=9.0.0 <9.0.7": ">=9.0.7",
+			"minimatch@>=10.0.0 <10.2.3": ">=10.2.3",
+			"nanoid@<3.3.18": ">=3.3.18",
+			"node-forge@<1.4.0": ">=1.4.0",
+			"on-headers@<1.1.0": ">=1.1.0",
+			"picomatch@<2.3.2": ">=2.3.2",
+			"picomatch@>=3.0.0 <3.0.2": ">=3.0.2",
+			"picomatch@>=4.0.0 <4.0.4": ">=4.0.4",
+			"postcss@<=8.5.17": ">=8.5.18",
+			"shell-quote@<=1.8.4": ">=1.9.0",
+			"tar@<=7.5.18": ">=7.5.19",
+			"undici@<6.27.0": ">=6.27.0",
+			"ws@>=6.0.0 <6.2.4": ">=6.2.4",
+			"ws@>=7.0.0 <7.5.11": ">=7.5.11",
+			"ws@>=8.0.0 <8.21.0": ">=8.21.0",
+			"@expo/cli>minimatch": ">=10.2.3",
+			"@expo/cli>picomatch": ">=4.0.4",
+			"react-native>ws": ">=8.21.0",
+			"cosmiconfig>js-yaml": ">=4.3.1",
+			"@istanbuljs/load-nyc-config>js-yaml": ">=4.3.1",
+			"glob>minimatch": ">=10.2.3",
+			"jest-util>picomatch": ">=4.0.4",
+			"@expo/fingerprint>minimatch": ">=10.2.3",
+			"micromatch>picomatch": ">=4.0.4",
+			"@expo/metro-config>minimatch": ">=10.2.3"
+		},
+		"auditConfig": {
+			"ignoreGhsas": [
+				"GHSA-w3rx-r6r6-pgpr",
+				"GHSA-5p2g-fcmc-qvqq"
+			]
 		}
 	}
 }
