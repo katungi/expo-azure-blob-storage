@@ -1,22 +1,21 @@
-import React, { useState } from "react";
 import { StatusBar } from "expo-status-bar";
+import { useState } from "react";
 import {
-	StyleSheet,
-	Text,
-	View,
-	ScrollView,
-	TextInput,
-	TouchableOpacity,
+	ActivityIndicator,
 	Alert,
 	Image,
-	ActivityIndicator,
 	SafeAreaView,
+	ScrollView,
+	StyleSheet,
+	Text,
+	TextInput,
+	TouchableOpacity,
+	View,
 } from "react-native";
 import {
 	createExpoImageUploader,
-	createAzureBlobUploader,
-	UploadResult,
-	UploadProgress,
+	type UploadProgress,
+	type UploadResult,
 } from "./src";
 
 interface TestConfig {
@@ -250,7 +249,10 @@ export default function App() {
 				</View>
 
 				{uploadResults.map((result, index) => (
-					<View key={index} style={styles.resultItem}>
+					<View
+						key={result.url ?? `${result.fileName ?? "result"}-${index}`}
+						style={styles.resultItem}
+					>
 						<Text
 							style={[
 								styles.resultStatus,

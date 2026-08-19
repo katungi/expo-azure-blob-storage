@@ -1,10 +1,10 @@
 import * as FileSystem from "expo-file-system";
 import type {
-	UploadResult,
-	UploadProgress,
-	MediaType,
 	AzureBlobConfig,
 	Config,
+	MediaType,
+	UploadProgress,
+	UploadResult,
 } from "../types/index.ts";
 
 export class AzureBlobUploader {
@@ -168,26 +168,46 @@ export class AzureBlobUploader {
 
 			const fileName = this.generateFileName(originalName, mediaType);
 			const uploadUrl = `${this.baseUrl}/${fileName}?${this.sasToken}`;
-
-			const uploadResult = await FileSystem.uploadAsync(uploadUrl, fileUri, {
+			const uploadOptions: FileSystem.FileSystemUploadOptions = {
 				httpMethod: "PUT",
 				headers: {
 					"x-ms-blob-type": "BlockBlob",
 					"Content-Type": this.getContentType(fileName),
 				},
 				uploadType: FileSystem.FileSystemUploadType.BINARY_CONTENT,
-			});
+			};
 
-			if (uploadResult.status === 200 || uploadResult.status === 201) {
-				return {
-					success: true,
-					fileName: fileName,
-					url: `${this.baseUrl}/${fileName}`,
-					response: uploadResult,
-				};
-			} else {
+			// `uploadAsync` cannot report progress, so callers that want updates get
+			// an upload task instead. Expo reports sent/expected bytes; normalise
+			// those onto `UploadProgress`.
+			const uploadResult = onProgress
+				? await FileSystem.createUploadTask(
+						uploadUrl,
+						fileUri,
+						uploadOptions,
+						({ totalBytesSent, totalBytesExpectedToSend }) =>
+							onProgress({
+								totalBytesWritten: totalBytesSent,
+								totalBytesExpectedToWrite: totalBytesExpectedToSend,
+							}),
+					).uploadAsync()
+				: await FileSystem.uploadAsync(uploadUrl, fileUri, uploadOptions);
+
+			// An upload task resolves to null/undefined when it was cancelled.
+			if (!uploadResult) {
+				throw new Error("Upload was cancelled");
+			}
+
+			if (uploadResult.status !== 200 && uploadResult.status !== 201) {
 				throw new Error(`Upload failed with status: ${uploadResult.status}`);
 			}
+
+			return {
+				success: true,
+				fileName: fileName,
+				url: `${this.baseUrl}/${fileName}`,
+				response: uploadResult,
+			};
 		} catch (error) {
 			console.error("Upload with progress error:", error);
 			return {
@@ -214,7 +234,9 @@ export class AzureBlobUploader {
 				file.uri,
 				file.name,
 				file.type || "image",
-				(progress) => onProgress?.(i, progress),
+				// Only forward a callback when the caller wants one, so uploads without
+				// progress reporting keep using the cheaper `uploadAsync` path.
+				onProgress ? (progress) => onProgress(i, progress) : undefined,
 			);
 
 			results.push(result);
@@ -237,7 +259,7 @@ export class AzureBlobUploader {
 	/**
 	 * Get blob URL for a filename
 	 */
-	private getBlobUrl(fileName: string): string {
+	getBlobUrl(fileName: string): string {
 		return `${this.baseUrl}/${fileName}`;
 	}
 

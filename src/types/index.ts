@@ -1,5 +1,6 @@
+import type { FileSystemUploadResult } from "expo-file-system";
 import type { ImagePickerResult } from "expo-image-picker";
-import { AzureBlobUploader } from "../core/uploader.ts";
+import type { AzureBlobUploader } from "../core/uploader.ts";
 
 export interface UploadProgress {
 	totalBytesWritten: number;
@@ -13,7 +14,7 @@ export interface UploadResult {
 	size?: number;
 	contentType?: string;
 	error?: string;
-	response?: any;
+	response?: FileSystemUploadResult;
 }
 
 export interface MediaItem {
@@ -57,14 +58,21 @@ export interface AzureBlobUploaderInterface {
 	uploadFile: (
 		fileUri: string,
 		originalName: string,
-		mediaType: MediaType,
+		mediaType?: MediaType,
 	) => Promise<UploadResult>;
 	uploadWithProgress: (
 		fileUri: string,
 		originalName: string,
-		mediaType: MediaType,
+		mediaType?: MediaType,
 		onProgress?: (progress: UploadProgress) => void,
 	) => Promise<UploadResult>;
+	uploadMultipleFiles: (
+		files: Array<{ uri: string; name: string; type?: MediaType }>,
+		onProgress?: (fileIndex: number, progress: UploadProgress) => void,
+		onFileComplete?: (fileIndex: number, result: UploadResult) => void,
+	) => Promise<UploadResult[]>;
+	updateSasToken: (newSasToken: string) => void;
+	getBlobUrl: (fileName: string) => string;
 	getConfig: () => Config;
 }
 
@@ -79,19 +87,22 @@ export interface ExpoImageUploaderInterface {
 	requestCameraPermission: () => Promise<boolean>;
 	checkPermissions: () => Promise<{ camera: boolean; mediaLibrary: boolean }>;
 	pickImageFromLibrary: (
-		options: ImagePickerOptions,
+		options?: ImagePickerOptions,
 	) => Promise<ImagePickerResult>;
 	pickMultipleImagesFromLibrary: (
-		options: ImagePickerOptions & { selectionLimit?: number },
+		options?: ImagePickerOptions & { selectionLimit?: number },
 	) => Promise<ImagePickerResult>;
-	takePhoto: (options: ImagePickerOptions) => Promise<ImagePickerResult>;
+	takePhoto: (options?: ImagePickerOptions) => Promise<ImagePickerResult>;
 	processAndUploadMultipleImages: (
 		result: ImagePickerResult,
-		fileNamePrefix: string,
+		fileNamePrefix?: string,
 		onProgress?: (fileIndex: number, progress: UploadProgress) => void,
 		onFileComplete?: (fileIndex: number, result: UploadResult) => void,
 	) => Promise<UploadResult[]>;
-	quickUploadFromLibrary: (opts: UploadOptions) => Promise<UploadResult | null>;
-	quickUploadFromCamera: (opts: UploadOptions) => Promise<UploadResult | null>;
+	quickUploadFromLibrary: (
+		opts?: UploadOptions,
+	) => Promise<UploadResult | null>;
+	quickUploadFromCamera: (opts?: UploadOptions) => Promise<UploadResult | null>;
+	updateSasToken: (newSasToken: string) => void;
 	getUploader: () => AzureBlobUploader;
 }

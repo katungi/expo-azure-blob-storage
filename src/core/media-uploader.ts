@@ -1,13 +1,13 @@
 import * as ImagePicker from "expo-image-picker";
 import { Platform } from "react-native";
-import { AzureBlobUploader } from "./uploader.ts";
 import type {
-	UploadProgress,
-	UploadResult,
 	AzureBlobConfig,
 	ImagePickerOptions,
 	UploadOptions,
+	UploadProgress,
+	UploadResult,
 } from "../types/index.ts";
+import { AzureBlobUploader } from "./uploader.ts";
 
 export class ExpoImageUploader {
 	private uploader: AzureBlobUploader;
@@ -141,9 +141,13 @@ export class ExpoImageUploader {
 			return null;
 		}
 
+		const selectedAsset = result.assets[0];
+		if (!selectedAsset) {
+			return null;
+		}
+
 		try {
-			const selectedAsset = result.assets[0];
-			const imageUri = selectedAsset!.uri;
+			const imageUri = selectedAsset.uri;
 
 			return onProgress
 				? await this.uploader.uploadWithProgress(
@@ -191,7 +195,7 @@ export class ExpoImageUploader {
 		fileName,
 		options = {},
 		onProgress,
-	}: UploadOptions): Promise<UploadResult | null> {
+	}: UploadOptions = {}): Promise<UploadResult | null> {
 		const pickerResult = await this.pickImageFromLibrary(options);
 		return this.processAndUploadImage(
 			pickerResult,
@@ -207,7 +211,7 @@ export class ExpoImageUploader {
 		fileName,
 		options = {},
 		onProgress,
-	}: UploadOptions): Promise<UploadResult | null> {
+	}: UploadOptions = {}): Promise<UploadResult | null> {
 		const photoResult = await this.takePhoto(options);
 		return this.processAndUploadImage(
 			photoResult,
@@ -226,7 +230,7 @@ export class ExpoImageUploader {
 	/**
 	 * Update SAS token
 	 */
-	private updateSasToken(newSasToken: string): void {
+	updateSasToken(newSasToken: string): void {
 		this.uploader.updateSasToken(newSasToken);
 	}
 }
