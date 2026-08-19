@@ -38,6 +38,12 @@
 npm install expo-azure-blob-storage
 ```
 
+Also published to [JSR](https://jsr.io):
+
+```bash
+npx jsr add @katungi/expo-azure-blob-storage
+```
+
 ### Peer Dependencies
 
 This package requires the following peer dependencies:
@@ -89,14 +95,14 @@ const imageUploader = new ExpoImageUploader({
 });
 
 const uploadFromLibrary = async () => {
-  const result = await imageUploader.quickUploadFromLibrary(
-    'my-photo.jpg',
-    { quality: 0.8 },
-    (progress) => {
+  const result = await imageUploader.quickUploadFromLibrary({
+    fileName: 'my-photo.jpg',
+    options: { quality: 0.8 },
+    onProgress: (progress) => {
       const percent = Math.round((progress.totalBytesWritten / progress.totalBytesExpectedToWrite) * 100);
       console.log(`Upload progress: ${percent}%`);
-    }
-  );
+    },
+  });
   
   if (result?.success) {
     console.log('🎉 Image uploaded:', result.url);
@@ -166,27 +172,29 @@ Expo-specific image handling built on top of AzureBlobUploader.
 
 #### Methods
 
-##### `quickUploadFromLibrary(fileName?, options?, onProgress?)`
+##### `quickUploadFromLibrary(opts?)`
 
-Pick an image from the library and upload in one step.
+Pick an image from the library and upload in one step. Takes a single options
+object: `{ fileName?, options?, onProgress? }`.
 
 ```typescript
-const result = await imageUploader.quickUploadFromLibrary(
-  'profile-pic.jpg',
-  { quality: 0.8, allowsEditing: true },
-  (progress) => console.log('Progress:', progress)
-);
+const result = await imageUploader.quickUploadFromLibrary({
+  fileName: 'profile-pic.jpg',
+  options: { quality: 0.8, allowsEditing: true },
+  onProgress: (progress) => console.log('Progress:', progress),
+});
 ```
 
-##### `quickUploadFromCamera(fileName?, options?, onProgress?)`
+##### `quickUploadFromCamera(opts?)`
 
-Take a photo and upload in one step.
+Take a photo and upload in one step. Takes a single options object:
+`{ fileName?, options?, onProgress? }`.
 
 ```typescript
-const result = await imageUploader.quickUploadFromCamera(
-  'camera-photo.jpg',
-  { quality: 0.9, aspect: [16, 9] }
-);
+const result = await imageUploader.quickUploadFromCamera({
+  fileName: 'camera-photo.jpg',
+  options: { quality: 0.9, aspect: [16, 9] },
+});
 ```
 
 ##### `pickMultipleImagesFromLibrary(options?)`
@@ -302,16 +310,16 @@ const ImageUploadComponent = () => {
     setProgress(0);
     
     try {
-      const result = await uploader.quickUploadFromLibrary(
-        undefined, // Auto-generate filename
-        { quality: 0.8, allowsEditing: true },
-        (progressData) => {
+      const result = await uploader.quickUploadFromLibrary({
+        // fileName omitted -> auto-generated
+        options: { quality: 0.8, allowsEditing: true },
+        onProgress: (progressData) => {
           const percentage = Math.round(
             (progressData.totalBytesWritten / progressData.totalBytesExpectedToWrite) * 100
           );
           setProgress(percentage);
-        }
-      );
+        },
+      });
       
       if (result?.success) {
         setUploadedUrl(result.url);
