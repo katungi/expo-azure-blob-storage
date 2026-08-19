@@ -1,0 +1,10 @@
+{
+	"name": "@katungi/expo-azure-blob-storage",
+	"version": "0.0.3",
+	"license": "MIT",
+	"exports": "./src/index.ts",
+	"publish": {
+		"include": ["src", "README.md", "LICENSE", "jsr.json"],
+		"exclude": ["**/*.test.ts", "**/*.spec.ts"]
+	}
+}
